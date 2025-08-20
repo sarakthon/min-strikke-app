@@ -1,3 +1,4 @@
+import { PageWrapper } from "~/components/PageWrapper";
 import type { Route } from "./+types/home";
 
 export function meta({ }: Route.MetaArgs) {
@@ -8,5 +9,5 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <h1>Hello, world!</h1>;
+  return <PageWrapper><h1>Hello, world!</h1></PageWrapper>;
 }

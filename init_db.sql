@@ -1,5 +1,5 @@
 CREATE TABLE recipes (
-    id int,
+    id SERIAL PRIMARY KEY,
     title varchar(255),
     intro TEXT,
     image_url TEXT

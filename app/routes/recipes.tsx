@@ -1,6 +1,5 @@
 import { PageWrapper } from "~/components/PageWrapper";
 import type { Route } from "./+types/recipes";
-import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { recipesTable } from '~/db/schema';
 import { Link } from "react-router";

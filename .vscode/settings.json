@@ -1,0 +1,35 @@
+{
+    "[js][css][typescript][typescriptreact][json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        /**
+        This makes the TailwindCSS Intellisense VSCode extension
+        function better by suggesting classes more places
+      */
+        "editor.quickSuggestions": {
+            "strings": true,
+        },
+        "editor.tabSize": 2,
+    },
+    /**
+      This prevents "Unknown at rule"-warnings caused by
+      @tailwind directives.
+    */
+    "files.associations": {
+        "*.css": "tailwindcss",
+    },
+    /**
+      This enables syntax highlighting for tailwind classes in
+      html files.
+    */
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "html",
+    },
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "typescriptreact",
+        "html"
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib",
+}

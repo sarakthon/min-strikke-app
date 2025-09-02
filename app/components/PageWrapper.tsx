@@ -3,7 +3,7 @@ import { NavLink } from "react-router";
 
 export function PageWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <main className="max-w-[900px] mx-auto">
+    <main className="max-w-[900px] mx-auto pb-32">
       <TopMenuBar className="hidden md:flex" />
       <MobileBottomMenuBar className="flex md:hidden" />
       {children}
@@ -88,7 +88,7 @@ function TopMenuBar({ className = "" }: { className?: string }) {
 function MobileBottomMenuBar({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`fixed bottom-3 rounded-full bg-white px-4 left-12 right-12 shadow-2xl border-[1px] border-gray-200 ${className}`}
+      className={`fixed z-10 bottom-3 rounded-full bg-white px-4 left-12 right-12 shadow-2xl border-[1px] border-gray-200 ${className}`}
     >
       <div className="grid grid-cols-3 w-full gap-4">
         <NavLink

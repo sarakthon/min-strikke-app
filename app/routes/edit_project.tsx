@@ -1,8 +1,9 @@
-import { Form, redirect } from "react-router";
-import { PageWrapper } from "~/components/PageWrapper";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { recipesTable } from "~/db/schema";
 import { eq } from "drizzle-orm";
+import { Form, redirect } from "react-router";
+import type { Route } from "./+types/edit_project";
+import { PageWrapper } from "~/components/PageWrapper";
+import { recipesTable } from "~/db/schema";
+import { createRequestContext } from "~/lib/context.server";
 
 // Handles GET requests
 export function loader() {}
@@ -11,39 +12,38 @@ export function loader() {}
 export async function action({ request }: Route.ActionArgs) {
   // Extract form-data from request:
   const formData = await request.formData();
+  const id = formData.get("id");
   const title = formData.get("title");
   const intro = formData.get("intro");
   const image_url = formData.get("image_url");
 
-  const db = drizzle(process.env.DATABASE_URL!);
+  const ctx = await createRequestContext(request);
 
-  const recipe: typeof recipesTable.$inferInsert = {
-    title: title as string,
-    intro: intro as string,
-    image_url: image_url as string,
-  };
+  const updatedRecipe = await ctx.db
+    .update(recipesTable)
+    .set({
+      title: title as string,
+      intro: intro as string,
+      image_url: image_url as string,
+    })
+    .where(eq(recipesTable.id, Number(id)))
+    .returning();
 
-  // Insert recipe into database:
-  const deleteRecipe = await db
-    .delete(recipesTable)
-    .where(eq(recipesTable.title, recipe.title));
-
-  console.log("Oppskrift slettet!");
+  console.log("Oppskrift oppdatert: ", updatedRecipe);
 
   return redirect("/recipes");
 }
 
-export default function New_ProjectPage() {
+export default function Edit_ProjectPage() {
   return (
     <PageWrapper>
       <section className="p-4">
-        <h1>
-          Her kan du slette en oppskrift - foreløpig kun på tittel (ikke lurt i
-          lengden)
-        </h1>
+        <h1>Her kan du redigere en eksisterende oppskrift.</h1>
         <Form method="POST" className="flex flex-col max-w-[300px] gap-2">
           <StyledInput name="title" placeholder="Tittel" />
-          <StyledButton>Slett</StyledButton>
+          <StyledInput name="intro" placeholder="Intro" />
+          <StyledInput name="image_url" placeholder="Bilde URL" />
+          <StyledButton>Lagre</StyledButton>
         </Form>
       </section>
     </PageWrapper>

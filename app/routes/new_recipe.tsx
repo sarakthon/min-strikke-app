@@ -1,8 +1,8 @@
 import { Form, redirect } from "react-router";
+import type { Route } from "./+types/new_recipe";
 import { PageWrapper } from "~/components/PageWrapper";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { recipesTable } from "~/db/schema";
-import { eq } from "drizzle-orm";
+import { createRequestContext } from "~/lib/context.server";
 
 // Handles GET requests
 export function loader() {}
@@ -15,7 +15,7 @@ export async function action({ request }: Route.ActionArgs) {
   const intro = formData.get("intro");
   const image_url = formData.get("image_url");
 
-  const db = drizzle(process.env.DATABASE_URL!);
+  const ctx = await createRequestContext(request);
 
   const recipe: typeof recipesTable.$inferInsert = {
     title: title as string,
@@ -24,26 +24,23 @@ export async function action({ request }: Route.ActionArgs) {
   };
 
   // Insert recipe into database:
-  const deleteRecipe = await db
-    .delete(recipesTable)
-    .where(eq(recipesTable.title, recipe.title));
+  const newRecipe = await ctx.db.insert(recipesTable).values(recipe);
 
-  console.log("Oppskrift slettet!");
+  console.log("Ny oppskrift lagt til:", newRecipe);
 
   return redirect("/recipes");
 }
 
-export default function New_ProjectPage() {
+export default function NewRecipePage() {
   return (
     <PageWrapper>
       <section className="p-4">
-        <h1>
-          Her kan du slette en oppskrift - foreløpig kun på tittel (ikke lurt i
-          lengden)
-        </h1>
+        <h1>Her kan du opprette nye oppskrift.</h1>
         <Form method="POST" className="flex flex-col max-w-[300px] gap-2">
           <StyledInput name="title" placeholder="Tittel" />
-          <StyledButton>Slett</StyledButton>
+          <StyledInput name="intro" placeholder="Intro" />
+          <StyledInput name="image_url" placeholder="Bilde URL" />
+          <StyledButton>Lagre</StyledButton>
         </Form>
       </section>
     </PageWrapper>

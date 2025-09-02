@@ -1,5 +1,5 @@
 import { PageWrapper } from "~/components/PageWrapper";
 
-export default function RecipePage() {
+export default function ProfilePage() {
   return <PageWrapper>WIP</PageWrapper>;
 }

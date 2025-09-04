@@ -14,6 +14,9 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     throw new Response("Ugyldig oppskrifts-ID", { status: 400 });
   }
   const ctx = await createRequestContext(request);
+  if (ctx.session !== ctx.appSecrets.SESSION_SECRET) {
+    return redirect("/login");
+  }
   const recipe = await getRecipe(id, ctx);
   if (!recipe) {
     throw new Response("Oppskriften finnes ikke", { status: 404 });
@@ -26,11 +29,14 @@ export async function action({ params, request }: Route.ActionArgs) {
   if (!id) {
     throw new Response("Ugyldig oppskrifts-ID", { status: 400 });
   }
+  const ctx = await createRequestContext(request);
+  if (ctx.session !== ctx.appSecrets.SESSION_SECRET) {
+    return redirect("/login");
+  }
 
   const formData = await request.formData();
   const action = formData.get("action") as string;
   if (action === "delete") {
-    const ctx = await createRequestContext(request);
     await deleteRecipe(id, ctx);
     return redirect("/recipes");
   }
@@ -44,7 +50,6 @@ export async function action({ params, request }: Route.ActionArgs) {
   const yarn = formData.get("yarn") ?? undefined;
   const gauge = formData.get("gauge") ?? undefined;
 
-  const ctx = await createRequestContext(request);
   await updateRecipe(
     id,
     {

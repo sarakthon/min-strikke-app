@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import { Link } from "react-router";
+import { Link, redirect } from "react-router";
 import type { Route } from "./+types/recipes.recipeId";
 import { PageWrapper } from "~/components/PageWrapper";
 import { StyledButton } from "~/components/StyledButton";
@@ -12,6 +12,10 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     throw new Response("Ugyldig oppskrifts-ID", { status: 400 });
   }
   const ctx = await createRequestContext(request);
+  if (ctx.session !== ctx.appSecrets.SESSION_SECRET) {
+    return redirect("/login");
+  }
+
   const recipe = await getRecipe(id, ctx);
   if (!recipe) {
     throw new Response("Oppskriften finnes ikke", { status: 404 });

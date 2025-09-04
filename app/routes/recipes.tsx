@@ -1,6 +1,5 @@
-import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FilePlusIcon } from "@radix-ui/react-icons";
-import { Form, Link } from "react-router";
+import { Link, redirect } from "react-router";
 import type { Route } from "./+types/recipes";
 import { PageWrapper } from "~/components/PageWrapper";
 import { StyledButton } from "~/components/StyledButton";
@@ -9,6 +8,10 @@ import { getRecipes } from "~/lib/recipesController";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const ctx = await createRequestContext(request);
+  if (ctx.session !== ctx.appSecrets.SESSION_SECRET) {
+    return redirect("/login");
+  }
+
   const recipes = await getRecipes(ctx);
 
   return {

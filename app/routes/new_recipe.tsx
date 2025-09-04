@@ -14,6 +14,9 @@ export async function action({ request }: Route.ActionArgs) {
   const designer = formData.get("designer");
 
   const ctx = await createRequestContext(request);
+  if (ctx.session !== ctx.appSecrets.SESSION_SECRET) {
+    return redirect("/login");
+  }
   const result = await createRecipe(
     {
       title: title as string,

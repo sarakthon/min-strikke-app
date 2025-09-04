@@ -5,6 +5,7 @@ export type AppConfig = z.infer<typeof appConfigSchema>;
 
 const appSecretsSchema = z.object({
   DATABASE_URL: z.string(),
+  SESSION_SECRET: z.string(),
 });
 export type AppSecrets = z.infer<typeof appSecretsSchema>;
 

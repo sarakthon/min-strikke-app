@@ -111,7 +111,7 @@ export default function EditRecipePage({ loaderData }: Route.ComponentProps) {
             label="Strikkefasthet"
             className="mx-4"
           />
-          <StyledButton type="submit" className="mx-4">
+          <StyledButton type="submit" className="mx-4 mt-4">
             Lagre endringer
           </StyledButton>
         </Form>

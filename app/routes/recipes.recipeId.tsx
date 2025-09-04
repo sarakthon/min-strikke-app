@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { Link } from "react-router";
 import type { Route } from "./+types/recipes.recipeId";
 import { PageWrapper } from "~/components/PageWrapper";
@@ -49,7 +49,9 @@ export default function RecipeContentPage({
               <p className="text-base leading-relaxed">{recipe.intro}</p>
             ) : null}
             <Link to={`/recipes/${recipe.id}/edit`}>
-              <StyledButton>Rediger oppskrift</StyledButton>
+              <StyledButton className="flex items-center gap-2">
+                <Pencil2Icon className="size-5" /> Rediger oppskrift
+              </StyledButton>
             </Link>
           </aside>
         </div>

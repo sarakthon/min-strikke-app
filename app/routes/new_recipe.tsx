@@ -1,6 +1,8 @@
 import { Form, redirect } from "react-router";
 import type { Route } from "./+types/new_recipe";
 import { PageWrapper } from "~/components/PageWrapper";
+import { StyledButton } from "~/components/StyledButton";
+import { StyledInput } from "~/components/StyledInput";
 import { createRequestContext } from "~/lib/context.server";
 import { createRecipe } from "~/lib/recipesController";
 
@@ -41,29 +43,5 @@ export default function NewRecipePage() {
         </Form>
       </section>
     </PageWrapper>
-  );
-}
-
-function StyledInput({
-  className = "",
-  ...props
-}: React.ComponentPropsWithoutRef<"input">) {
-  return (
-    <input
-      className={`border-[1px] border-b-gray-500 rounded-sm px-2 ${className}`}
-      {...props}
-    />
-  );
-}
-
-function StyledButton({
-  className = "",
-  ...props
-}: React.ComponentPropsWithoutRef<"button">) {
-  return (
-    <button
-      className={`bg-green-300 rounded-sm px-2 py-1 ${className}`}
-      {...props}
-    />
   );
 }

@@ -1,10 +1,11 @@
-import { Form, redirect } from "react-router";
+import { Form, Link, redirect } from "react-router";
 import type { Route } from "./+types/recipes.recipeId.edit";
 import { PageWrapper } from "~/components/PageWrapper";
 import { StyledButton } from "~/components/StyledButton";
 import { StyledInput } from "~/components/StyledInput";
 import { createRequestContext } from "~/lib/context.server";
 import { getRecipe, updateRecipe } from "~/lib/recipesController";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const id = Number(params.recipeId);
@@ -57,6 +58,13 @@ export default function EditRecipePage({ loaderData }: Route.ComponentProps) {
   return (
     <PageWrapper>
       <section className="max-w-md mx-auto">
+        <Link
+          to={`/recipes/${recipe.id}`}
+          className={`flex gap-1 items-center text-sm`}
+        >
+          <ArrowLeftIcon className="size-5" />
+          Tilbake
+        </Link>
         <h1 className="text-4xl font-bold mt-12 mb-4 mx-4">
           Rediger oppskrift
         </h1>

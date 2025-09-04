@@ -1,11 +1,12 @@
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { AlertDialog } from "radix-ui";
 import { Form, Link, redirect } from "react-router";
 import type { Route } from "./+types/recipes.recipeId.edit";
 import { PageWrapper } from "~/components/PageWrapper";
 import { StyledButton } from "~/components/StyledButton";
 import { StyledInput } from "~/components/StyledInput";
 import { createRequestContext } from "~/lib/context.server";
-import { getRecipe, updateRecipe } from "~/lib/recipesController";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { deleteRecipe, getRecipe, updateRecipe } from "~/lib/recipesController";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const id = Number(params.recipeId);
@@ -25,7 +26,15 @@ export async function action({ params, request }: Route.ActionArgs) {
   if (!id) {
     throw new Response("Ugyldig oppskrifts-ID", { status: 400 });
   }
+
   const formData = await request.formData();
+  const action = formData.get("action") as string;
+  if (action === "delete") {
+    const ctx = await createRequestContext(request);
+    await deleteRecipe(id, ctx);
+    return redirect("/recipes");
+  }
+
   const title = formData.get("title") ?? undefined;
   const intro = formData.get("intro") ?? undefined;
   const image_url = formData.get("image_url") ?? undefined;
@@ -111,11 +120,52 @@ export default function EditRecipePage({ loaderData }: Route.ComponentProps) {
             label="Strikkefasthet"
             className="mx-4"
           />
-          <StyledButton type="submit" className="mx-4 mt-4">
+          <StyledButton type="submit" className="mx-4 mt-4 mb-12">
             Lagre endringer
           </StyledButton>
+          <DeleteButton />
         </Form>
       </section>
     </PageWrapper>
+  );
+}
+
+function DeleteButton() {
+  return (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger asChild>
+        <button className="rounded-full font-medium border-[1px] border-red-300 text-red-800 hover:underline px-4 py-2 hover:cursor-pointer mx-4">
+          Slett oppskrift
+        </button>
+      </AlertDialog.Trigger>
+
+      <AlertDialog.Portal>
+        <AlertDialog.Overlay className="fixed inset-0 backdrop-blur-sm" />
+        <AlertDialog.Content className="fixed bg-white left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-gray1 p-[25px] shadow-lg focus:outline-none">
+          <AlertDialog.Title className="m-0 text-[17px] font-medium">
+            Er du helt sikker?
+          </AlertDialog.Title>
+          <AlertDialog.Description className="mb-5 mt-[15px] text-[15px] leading-normal">
+            Denne handlingen kan ikke angres. Oppskriften slettes permanent.
+          </AlertDialog.Description>
+
+          <div className="flex justify-end gap-[25px]">
+            <AlertDialog.Cancel asChild>
+              <StyledButton>Avbryt</StyledButton>
+            </AlertDialog.Cancel>
+
+            <Form method="post" replace>
+              <input type="hidden" name="action" value="delete" />
+              <button
+                type="submit"
+                className="rounded-full font-medium border-[1px] border-red-300 text-red-800 hover:underline px-4 py-2 hover:cursor-pointer mx-4"
+              >
+                Ja, slett
+              </button>
+            </Form>
+          </div>
+        </AlertDialog.Content>
+      </AlertDialog.Portal>
+    </AlertDialog.Root>
   );
 }

@@ -1,24 +1,20 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Form, Link, redirect } from "react-router";
+import { Form, Link } from "react-router";
 import type { Route } from "./+types/recipes";
 import { PageWrapper } from "~/components/PageWrapper";
-import { recipesTable } from "~/db/schema";
+import { createRequestContext } from "~/lib/context.server";
+import { getRecipes } from "~/lib/recipesController";
 
-export async function loader({}: Route.LoaderArgs) {
-  // Connect to SQL server
-  const db = drizzle(process.env.DATABASE_URL!);
+export async function loader({ request }: Route.LoaderArgs) {
+  const ctx = await createRequestContext(request);
+  const recipes = await getRecipes(ctx);
 
-  // Fetch recipes from SQL server
-  const recipes = await db.select().from(recipesTable);
-
-  // Return recipes to frontend
   return {
     recipes,
   };
 }
 
+/*
 // Deletes recipe from database:
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -59,6 +55,7 @@ export async function action({ request }: Route.ActionArgs) {
     return redirect(url.pathname);
   }
 }
+*/
 
 export default function RecipePage({ loaderData }: Route.ComponentProps) {
   return (

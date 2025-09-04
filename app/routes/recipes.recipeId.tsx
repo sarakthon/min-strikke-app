@@ -2,6 +2,7 @@ import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router";
 import type { Route } from "./+types/recipes.recipeId";
 import { PageWrapper } from "~/components/PageWrapper";
+import { StyledButton } from "~/components/StyledButton";
 import { createRequestContext } from "~/lib/context.server";
 import { getRecipe } from "~/lib/recipesController";
 
@@ -47,6 +48,9 @@ export default function RecipeContentPage({
             {recipe.intro ? (
               <p className="text-base leading-relaxed">{recipe.intro}</p>
             ) : null}
+            <Link to={`/recipes/${recipe.id}/edit`}>
+              <StyledButton>Rediger oppskrift</StyledButton>
+            </Link>
           </aside>
         </div>
       </div>

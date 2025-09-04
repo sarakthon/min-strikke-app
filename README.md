@@ -7,3 +7,9 @@ docker run -e POSTGRES_PASSWORD=password123 --rm -p 5432:5432 postgres
 ```sh
 psql -h localhost -p 5432 --username postgres
 ```
+
+### Hvordan migrere etter å ha redigert database schema
+```sh
+npx drizzle-kit generate
+npx drizzle-kit push
+```

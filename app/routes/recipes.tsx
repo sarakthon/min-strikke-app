@@ -36,7 +36,7 @@ export default function RecipePage({ loaderData }: Route.ComponentProps) {
             >
               <img
                 src={recipe.image_url}
-                className="aspect-square object-center brightness-75 transition-all hover:scale-110"
+                className="aspect-square object-center object-cover brightness-75 transition-all hover:scale-110"
               />
               <div className="absolute text-white bottom-4 left-4 right-4">
                 <h2 className="font-semibold text-xl leading-4 mb-1.5">

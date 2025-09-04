@@ -1,7 +1,9 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import { FilePlusIcon } from "@radix-ui/react-icons";
 import { Form, Link } from "react-router";
 import type { Route } from "./+types/recipes";
 import { PageWrapper } from "~/components/PageWrapper";
+import { StyledButton } from "~/components/StyledButton";
 import { createRequestContext } from "~/lib/context.server";
 import { getRecipes } from "~/lib/recipesController";
 
@@ -14,54 +16,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-/*
-// Deletes recipe from database:
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const _action = formData.get("_action");
-
-  const db = drizzle(process.env.DATABASE_URL!);
-
-  try {
-    if (_action === "delete") {
-      const recipeId = Number(formData.get("recipeId"));
-      if (!recipeId) throw new Response("Missing recipe id", { status: 400 });
-
-      await db.delete(recipesTable).where(eq(recipesTable.id, recipeId));
-    }
-
-    if (_action === "update") {
-      const id = Number(formData.get("id"));
-      if (!id) throw new Response("Missing recipe id", { status: 400 });
-
-      const title = (formData.get("title") ?? "").toString();
-      const intro = (formData.get("intro") ?? "").toString();
-      const image_url = (formData.get("image_url") ?? "").toString();
-
-      await db
-        .update(recipesTable)
-        .set({ title, intro, image_url })
-        .where(eq(recipesTable.id, id))
-        .returning();
-    }
-
-    // Tilbake til samme side
-    const url = new URL(request.url);
-    return redirect(url.pathname);
-  } catch (err) {
-    console.error(err);
-    // Du kan rendere en feilmelding i UI ved å returnere data i stedet om du vil
-    const url = new URL(request.url);
-    return redirect(url.pathname);
-  }
-}
-*/
-
 export default function RecipePage({ loaderData }: Route.ComponentProps) {
   return (
     <PageWrapper>
       <h1 className="text-4xl font-bold mt-12 mb-4 mx-4">Oppskrifter</h1>
 
+      <Link to="/new_recipe" className="inline-block mt-4 mb-4 mx-4">
+        <StyledButton className="flex items-center gap-2">
+          <FilePlusIcon className="size-5" color="#444444" /> Ny oppskrift
+        </StyledButton>
+      </Link>
       <div className="grid grid-cols-2 mx-2 sm:grid-cols-2 lg:grid-cols-3">
         {loaderData.recipes.map((recipe) => {
           return (

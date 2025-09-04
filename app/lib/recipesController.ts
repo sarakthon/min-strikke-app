@@ -25,7 +25,7 @@ export async function getRecipe(id: number, ctx: RequestContext) {
 
 export async function updateRecipe(
   id: number,
-  input: typeof recipesTable.$inferInsert,
+  input: Partial<typeof recipesTable.$inferInsert>,
   ctx: RequestContext
 ) {
   return await ctx.db

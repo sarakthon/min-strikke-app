@@ -1,8 +1,8 @@
 import { Form, redirect } from "react-router";
 import type { Route } from "./+types/new_recipe";
 import { PageWrapper } from "~/components/PageWrapper";
-import { recipesTable } from "~/db/schema";
 import { createRequestContext } from "~/lib/context.server";
+import { createRecipe } from "~/lib/recipesController";
 
 // Handles GET requests
 export function loader() {}
@@ -16,19 +16,16 @@ export async function action({ request }: Route.ActionArgs) {
   const image_url = formData.get("image_url");
 
   const ctx = await createRequestContext(request);
+  const newRecipe = await createRecipe(
+    {
+      title: title as string,
+      intro: intro as string,
+      image_url: image_url as string,
+    },
+    ctx
+  );
 
-  const recipe: typeof recipesTable.$inferInsert = {
-    title: title as string,
-    intro: intro as string,
-    image_url: image_url as string,
-  };
-
-  // Insert recipe into database:
-  const newRecipe = await ctx.db.insert(recipesTable).values(recipe);
-
-  console.log("Ny oppskrift lagt til:", newRecipe);
-
-  return redirect("/recipes");
+  return redirect(`/recipes/${newRecipe.id}`);
 }
 
 export default function NewRecipePage() {

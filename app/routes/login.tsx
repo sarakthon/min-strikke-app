@@ -8,9 +8,12 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const username = formData.get("username");
   const password = formData.get("password");
+  const ctx = await createRequestContext(request);
 
-  if (username === "testbruker" && password === "strikkeapp") {
-    const ctx = await createRequestContext(request);
+  if (
+    username === ctx.appSecrets.USERNAME &&
+    password === ctx.appSecrets.PASSWORD
+  ) {
     return redirect("/recipes", {
       headers: {
         "Set-Cookie": `session=${ctx.appSecrets.SESSION_SECRET}; HttpOnly; Path=/`,

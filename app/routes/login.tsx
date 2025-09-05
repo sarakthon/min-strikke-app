@@ -32,7 +32,7 @@ export default function LoginPage() {
         <h1 className="text-3xl font-medium">Logg inn</h1>
         <h2 className="text-lg mb-6">Min strikkeapp</h2>
         <StyledInput name="username" label="Brukernavn" />
-        <StyledInput name="password" label="Passord" />
+        <StyledInput name="password" label="Passord" type="password" />
         <StyledButton type="submit" className="mt-4">
           Login
         </StyledButton>

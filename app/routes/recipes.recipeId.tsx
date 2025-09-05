@@ -62,6 +62,11 @@ export default function RecipeContentPage({
                 <strong>Pinne:</strong> {recipe.recommended_needle_size}
               </p>
             ) : null}
+            {recipe.gauge ? (
+              <p className="text-sm">
+                <strong>Strikkefasthet:</strong> {recipe.gauge}
+              </p>
+            ) : null}
 
             <Link to={`/recipes/${recipe.id}/edit`}>
               <StyledButton className="flex items-center gap-2">

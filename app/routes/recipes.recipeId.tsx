@@ -52,6 +52,17 @@ export default function RecipeContentPage({
             {recipe.intro ? (
               <p className="text-base leading-relaxed">{recipe.intro}</p>
             ) : null}
+            {recipe.yarn ? (
+              <p className="text-sm">
+                <strong>Garn:</strong> {recipe.yarn}
+              </p>
+            ) : null}
+            {recipe.recommended_needle_size ? (
+              <p className="text-sm">
+                <strong>Pinne:</strong> {recipe.recommended_needle_size}
+              </p>
+            ) : null}
+
             <Link to={`/recipes/${recipe.id}/edit`}>
               <StyledButton className="flex items-center gap-2">
                 <Pencil2Icon className="size-5" /> Rediger oppskrift

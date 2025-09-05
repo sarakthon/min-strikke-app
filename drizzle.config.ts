@@ -9,6 +9,7 @@ export default defineConfig({
     url: process.env.DATABASE_URL!,
     ssl: {
       rejectUnauthorized: false,
+      ca: process.env.DB_CA_CERT,
     },
   },
 });

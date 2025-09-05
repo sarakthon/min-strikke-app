@@ -11,7 +11,8 @@ export function getDb(database_url: string) {
     const pool = new Pool({
       connectionString: database_url,
       ssl: {
-        rejectUnauthorized: false, // This allows self-signed certificates
+        rejectUnauthorized: false,
+        ca: process.env.DB_CA_CERT,
       },
     });
     global.__db = drizzle(pool);

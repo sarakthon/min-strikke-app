@@ -21,7 +21,7 @@ export class RequestContext {
 
     this.appConfig = getAppConfig();
     this.appSecrets = getAppSecrets();
-    this.db = getDb(this.appSecrets.DATABASE_URL);
+    this.db = getDb();
     this.session = cookies.session;
   }
 }

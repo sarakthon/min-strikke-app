@@ -6,14 +6,22 @@ declare global {
   var __db: NodePgDatabase;
 }
 
-export function getDb(database_url: string) {
+export function getDb() {
   if (global.__db == null) {
     const pool = new Pool({
-      connectionString: database_url,
-      ssl: {
-        rejectUnauthorized: false,
-        ca: process.env.DB_CA_CERT,
-      },
+      user: process.env.DB_USER!,
+      password: process.env.DB_PASSWORD!,
+      host: process.env.DB_HOST!,
+      database: process.env.DB_DATABASE!,
+      port: parseInt(process.env.DB_PORT!),
+      ...(process.env.DB_CA_CERT != null
+        ? {
+            ssl: {
+              rejectUnauthorized: false,
+              ca: process.env.DB_CA_CERT,
+            },
+          }
+        : {}),
     });
     global.__db = drizzle(pool);
   }
